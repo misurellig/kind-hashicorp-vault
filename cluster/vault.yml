@@ -1,0 +1,19 @@
+apiVersion: kind.x-k8s.io/v1alpha4
+kind: Cluster
+name: vault
+nodes:
+- role: control-plane
+  extraPortMappings:
+  - containerPort: 30000
+    hostPort: 30000
+  - containerPort: 30092
+    hostPort: 30092
+  - containerPort: 31321
+    hostPort: 31321
+  - containerPort: 31300
+    hostPort: 31300
+  - containerPort: 31400
+    hostPort: 31400
+- role: worker
+- role: worker
+- role: worker
