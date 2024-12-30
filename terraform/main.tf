@@ -20,10 +20,21 @@ resource "vault_generic_endpoint" "userpass_admin" {
   })
 }
 
-resource "vault_token_auth_backend_role" "service_account_role" {
-  role_name              = "service-account-role"
-  allowed_policies       = ["service-account-policy"]
-  orphan                 = true
-  renewable              = false
-  token_explicit_max_ttl = 120
+resource "vault_auth_backend" "approle" {
+  type = "approle"
+}
+
+resource "vault_approle_auth_backend_role" "awx-de" {
+  backend                 = vault_auth_backend.approle.path
+  role_name               = "awx-de"
+  token_policies          = ["dev-kv2-secrets-policy"]
+  token_ttl               = 3600
+  token_max_ttl           = 14400
+  token_no_default_policy = true
+}
+
+resource "vault_approle_auth_backend_role_secret_id" "id" {
+  backend      = vault_auth_backend.approle.path
+  role_name    = vault_approle_auth_backend_role.awx-de.role_name
+  wrapping_ttl = 60
 }

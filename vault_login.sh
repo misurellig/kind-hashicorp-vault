@@ -9,7 +9,7 @@ else
 fi
 
 # Login as admin user
-ADMIN_TOKEN=$(vault login -token-only -method=userpass username=$ADMIN_USER password=$ADMIN_PASS)
+ADMIN_TOKEN=$(vault login -address=$VAULT_ADDR -token-only -method=userpass username=$ADMIN_USER password=$ADMIN_PASS)
 
 # Use the admin token to create a short-lived token
 SHORT_LIVED_TOKEN=$(VAULT_TOKEN=$ADMIN_TOKEN vault token create -explicit-max-ttl=1h -format=json | jq -r '.auth.client_token')
